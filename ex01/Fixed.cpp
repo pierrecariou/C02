@@ -12,6 +12,12 @@ Fixed::Fixed(int const fpoint) : fpoint(fpoint << Fixed::bits)
 	return ;
 }
 
+Fixed::Fixed(float const fpoint) : fpoint(roundf(fpoint * (1 << Fixed::bits)))
+{
+	std::cout << "Fixed created" << std::endl;
+	return ;
+}
+
 Fixed::Fixed(const Fixed &src) : fpoint(0)
 {
 	*this = src;
@@ -35,7 +41,6 @@ Fixed		&Fixed::operator=(const Fixed &rhs)
 
 int		Fixed::getRawBits(void) const
 {
-	std::cout << "getRawBits called" << std::endl;
 	return this->fpoint;
 }
 
@@ -48,6 +53,22 @@ int		Fixed::getBits(void)
 {
 	std::cout << "getBits called" << std::endl;
 	return Fixed::bits;
+}
+
+float	Fixed::toFloat(void) const
+{
+	return ((float)this->fpoint / (float)(1 << Fixed::bits));
+}
+
+int		Fixed::toInt(void) const
+{
+	return (this->fpoint >> Fixed::bits);
+}
+
+std::ostream	&operator<<(std::ostream &o, Fixed const &rhs)
+{
+	o << rhs.getRawBits();
+	return o;
 }
 
 int const Fixed::bits = 8;
